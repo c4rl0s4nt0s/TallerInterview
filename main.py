@@ -4,9 +4,20 @@ from venmo import User
 
 
 class MiniVenmo:
+    def __init__(self):
+        self.users = []
+
     def create_user(self, username, balance, credit_card_number):
-        # TODO: add code here
-        pass
+        user = User(username)
+
+        if balance:
+            user.add_to_balance(balance)
+
+        if credit_card_number:
+            user.add_credit_card(credit_card_number)
+
+        self.users.append(user)
+        return user
 
     def render_feed(self, feed):
         # Bobby paid Carol $5.00 for Coffee

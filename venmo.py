@@ -17,6 +17,7 @@ class User:
     def __init__(self, username):
         self.credit_card_number = None
         self.balance = 0.0
+        self.activity = []
 
         if self._is_valid_username(username):
             self.username = username
@@ -45,7 +46,10 @@ class User:
 
     def pay(self, target, amount, note):
         # TODO: add logic to pay with card or balance
-        pass
+        amount = float(amount)
+        if self.balance >= amount:
+            return self.pay_with_balance(target, amount, note)
+        return self.pay_with_card(target, amount, note)
 
     def pay_with_card(self, target, amount, note):
         amount = float(amount)
@@ -60,12 +64,29 @@ class User:
         self._charge_credit_card(self.credit_card_number)
         payment = Payment(amount, self, target, note)
         target.add_to_balance(amount)
+        self.activity.append(payment)
+        target.activity.append(payment)
 
         return payment
 
     def pay_with_balance(self, target, amount, note):
         # TODO: add code here
-        pass
+        amount = float(amount)
+
+        if self.username == target.username:
+            raise PaymentException("User cannot pay themselves.")
+        elif amount <= 0.0:
+            raise PaymentException("Amount must be a non-negative number.")
+        elif self.balance < amount:
+            raise PaymentException("Insufficient balance to make payment.")
+
+        self.balance -= amount
+        payment = Payment(amount, self, target, note)
+        target.add_to_balance(amount)
+        self.activity.append(payment)
+        target.activity.append(payment)
+
+        return payment
 
     def _is_valid_credit_card(self, credit_card_number):
         return credit_card_number in ["4111111111111111", "4242424242424242"]
