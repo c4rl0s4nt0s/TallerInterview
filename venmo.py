@@ -24,8 +24,8 @@ class User:
     def __init__(self, username):
         self.credit_card_number = None
         self.balance = 0.0
-        self.activity = []
-        self.friends = []
+        self.activity = []  # Feed events (payments, friendships).
+        self.friends = []  # Bidirectional friend list.
 
         if self._is_valid_username(username):
             self.username = username
@@ -42,6 +42,7 @@ class User:
         if new_friend is self or new_friend in self.friends:
             return None
 
+        # Maintain bidirectional friendship and log in both feeds.
         self.friends.append(new_friend)
         new_friend.friends.append(self)
         friendship = Friendship(self, new_friend)
@@ -63,8 +64,8 @@ class User:
             raise CreditCardException("Invalid credit card number.")
 
     def pay(self, target, amount, note):
-        # TODO: add logic to pay with card or balance
         amount = float(amount)
+        # Prefer balance, fall back to card.
         if self.balance >= amount:
             return self.pay_with_balance(target, amount, note)
         return self.pay_with_card(target, amount, note)
@@ -82,6 +83,7 @@ class User:
         self._charge_credit_card(self.credit_card_number)
         payment = Payment(amount, self, target, note)
         target.add_to_balance(amount)
+        # Record the payment in both users' feeds.
         self.activity.append(payment)
         target.activity.append(payment)
 
@@ -101,6 +103,7 @@ class User:
         self.balance -= amount
         payment = Payment(amount, self, target, note)
         target.add_to_balance(amount)
+        # Record the payment in both users' feeds.
         self.activity.append(payment)
         target.activity.append(payment)
 

@@ -39,6 +39,7 @@ class MiniVenmo:
                 )
                 print(line)
                 lines.append(line)
+        # Return the rendered lines for testing/verification.
         return lines
 
     @classmethod
