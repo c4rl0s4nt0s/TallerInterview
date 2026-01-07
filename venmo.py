@@ -25,7 +25,7 @@ class User:
         self.credit_card_number = None
         self.balance = 0.0
         self.activity = []  # Feed events (payments, friendships).
-        self.friends = []  # Bidirectional friend list.
+        self.friends = []  # Friend list.
 
         if self._is_valid_username(username):
             self.username = username
@@ -42,7 +42,7 @@ class User:
         if new_friend is self or new_friend in self.friends:
             return None
 
-        # Maintain bidirectional friendship and log in both feeds.
+        # Maintain friendship and log in both feeds.
         self.friends.append(new_friend)
         new_friend.friends.append(self)
         friendship = Friendship(self, new_friend)
@@ -90,7 +90,6 @@ class User:
         return payment
 
     def pay_with_balance(self, target, amount, note):
-        # TODO: add code here
         amount = float(amount)
 
         if self.username == target.username:
