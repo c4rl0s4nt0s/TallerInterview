@@ -1,6 +1,4 @@
-import io
 import unittest
-from contextlib import redirect_stdout
 
 from main import MiniVenmo
 from venmo import User
@@ -30,11 +28,8 @@ class TestFeed(unittest.TestCase):
         bobby.add_friend(carol)
 
         feed = bobby.retrieve_feed()
-        buffer = io.StringIO()
-        with redirect_stdout(buffer):
-            venmo.render_feed(feed)
+        output = venmo.render_feed(feed)
 
-        output = buffer.getvalue().strip().splitlines()
         self.assertEqual(output[0], "Bobby paid Carol $5.00 for Coffee")
         self.assertEqual(output[1], "Bobby added Carol as a friend")
 
@@ -49,11 +44,8 @@ class TestFeed(unittest.TestCase):
         carol.pay(bobby, 15.0, "Lunch")
 
         feed = bobby.retrieve_activity()
-        buffer = io.StringIO()
-        with redirect_stdout(buffer):
-            venmo.render_feed(feed)
+        output = venmo.render_feed(feed)
 
-        output = buffer.getvalue().strip().splitlines()
         self.assertEqual(output[0], "Bobby paid Carol $5.00 for Coffee")
         self.assertEqual(output[1], "Carol paid Bobby $15.00 for Lunch")
 

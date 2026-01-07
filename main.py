@@ -23,17 +23,23 @@ class MiniVenmo:
     def render_feed(self, feed):
         # Bobby paid Carol $5.00 for Coffee
         # Carol paid Bobby $15.00 for Lunch
+        lines = []
         for item in feed:
             if isinstance(item, Payment):
-                print(
+                line = (
                     f"{item.actor.username} paid {item.target.username} "
                     f"${item.amount:.2f} for {item.note}"
                 )
+                print(line)
+                lines.append(line)
             elif isinstance(item, Friendship):
-                print(
+                line = (
                     f"{item.actor.username} added {item.target.username} "
                     "as a friend"
                 )
+                print(line)
+                lines.append(line)
+        return lines
 
     @classmethod
     def run(cls):
@@ -65,4 +71,5 @@ class TestUser(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    MiniVenmo.run()
     unittest.main()
