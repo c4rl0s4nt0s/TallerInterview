@@ -24,12 +24,6 @@ Questions:
 
 """
 
-Implementation notes
-- Modular, minimal structure: `exceptions.py` (custom errors), `venmo.py` (core models/logic), `main.py` (MiniVenmo + entrypoint), `tests/`.
-- `MiniVenmo.create_user()` creates a user, applies optional balance/card, and stores it in `self.users`.
-- `User.pay()` uses balance when possible, otherwise charges the card.
-- Feed includes payments and friendships; `retrieve_activity()` is an alias of `retrieve_feed()`.
-
 Running
 - Show feed output (no tests): `python -c "from main import MiniVenmo; MiniVenmo.run()"`
 - Run all tests: `python -m unittest discover -s tests`
