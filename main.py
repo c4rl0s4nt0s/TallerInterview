@@ -1,6 +1,7 @@
 import unittest
+
 from exceptions import CreditCardException, PaymentException, UsernameException
-from venmo import User
+from venmo import Friendship, Payment, User
 
 
 class MiniVenmo:
@@ -22,8 +23,17 @@ class MiniVenmo:
     def render_feed(self, feed):
         # Bobby paid Carol $5.00 for Coffee
         # Carol paid Bobby $15.00 for Lunch
-        # TODO: add code here
-        pass
+        for item in feed:
+            if isinstance(item, Payment):
+                print(
+                    f"{item.actor.username} paid {item.target.username} "
+                    f"${item.amount:.2f} for {item.note}"
+                )
+            elif isinstance(item, Friendship):
+                print(
+                    f"{item.actor.username} added {item.target.username} "
+                    "as a friend"
+                )
 
     @classmethod
     def run(cls):

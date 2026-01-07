@@ -13,11 +13,19 @@ class Payment:
         self.note = note
 
 
+class Friendship:
+    def __init__(self, actor, target):
+        self.id = str(uuid.uuid4())
+        self.actor = actor
+        self.target = target
+
+
 class User:
     def __init__(self, username):
         self.credit_card_number = None
         self.balance = 0.0
         self.activity = []
+        self.friends = []
 
         if self._is_valid_username(username):
             self.username = username
@@ -25,12 +33,22 @@ class User:
             raise UsernameException("Username not valid.")
 
     def retrieve_feed(self):
-        # TODO: add code here
-        return []
+        return list(self.activity)
+
+    def retrieve_activity(self):
+        return self.retrieve_feed()
 
     def add_friend(self, new_friend):
-        # TODO: add code here
-        pass
+        if new_friend is self or new_friend in self.friends:
+            return None
+
+        self.friends.append(new_friend)
+        new_friend.friends.append(self)
+        friendship = Friendship(self, new_friend)
+        self.activity.append(friendship)
+        new_friend.activity.append(friendship)
+
+        return friendship
 
     def add_to_balance(self, amount):
         self.balance += float(amount)
